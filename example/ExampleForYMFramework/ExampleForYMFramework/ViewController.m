@@ -34,7 +34,7 @@ static NSString * const kProductChannel = @"1";
 //    [self testUIImageViewDownloadImage];
 //    [self testUIButtonDownloadImage];
 //    [self testFetchWebViewTitle];
-    [self testWebp];
+//    [self testWebp];
 //    [self testWebpForWebView];
 //    [self testYMProgress];
 //    [self testBackgroundTask];
@@ -49,6 +49,7 @@ static NSString * const kProductChannel = @"1";
 {
     [super motionEnded:motion
              withEvent:event];
+    [YMDebugging setNetworkDebuggingEnabled:YES];
     [YMDebugging showExplorer];
     
     static BOOL kFirstShow = YES;
@@ -72,7 +73,7 @@ static NSString * const kProductChannel = @"1";
                                                              }
                                                               success:^(NSURLSessionDataTask *task, YMHTTPResponseData *responseData) {
                                                                   NSLog(@"%@",responseData.ResultMessage);
-                                                                  NSLog(@"request URL is %@",task.currentRequest.URL.absoluteString);
+                                                                  NSLog(@"request URL is %@",responseData.data);
                                                               }
                                                               failure:^(NSURLSessionDataTask *task, NSError *error) {
                                                                   NSLog(@"error %@",error.localizedDescription);
@@ -122,7 +123,7 @@ static NSString * const kProductChannel = @"1";
     //标准webpURL
     NSString *url = @"http://img01.taobaocdn.com/imgextra/i1/1123492339/T2XX3ZXhXXXXXXXXXX_!!1123492339.jpg_.webp";
     //玉米webpURL
-    //    NSString *url = @"http://yumi2014.b0.upaiyun.com/banner/14483353790a62cd5be70e4e2f877e410df031febc.jpg!webp.orginal";
+//  NSString *url = @"http://yumi2014.b0.upaiyun.com/banner/14483353790a62cd5be70e4e2f877e410df031febc.jpg!webp.orginal";
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     imgView.backgroundColor = [UIColor redColor];
