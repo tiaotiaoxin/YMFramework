@@ -64,4 +64,18 @@
  */
 - (BOOL)ym_isContainsEmoji;
 
+/**
+ *  生成MD5
+ *
+ *  @return
+ */
+- (NSString *)ym_MD5;
+
+/**
+ *  判断是否是是手机号
+ *
+ *  @return
+ */
+- (BOOL)ym_isMobileNumber;
+
 @end

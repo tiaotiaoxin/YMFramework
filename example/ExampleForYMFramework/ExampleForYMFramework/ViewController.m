@@ -8,12 +8,17 @@
 
 #import <YMFramework/YMFramework.h>
 #import "ViewController.h"
+#import "BaseWebVC.h"
 
 static NSString * const kProductID = @"10000";
 static NSString * const kProductVersion = @"1";
 static NSString * const kProductChannel = @"1";
 
-@interface ViewController ()<UIWebViewDelegate>
+@interface ViewController ()
+<
+UIWebViewDelegate,
+YMWebViewDelegate
+>
 
 @end
 
@@ -30,7 +35,7 @@ static NSString * const kProductChannel = @"1";
                                                  channel:kProductChannel];
     
 //    [self testHttpRequest];
-    
+//    
 //    [self testUIImageViewDownloadImage];
 //    [self testUIButtonDownloadImage];
 //    [self testFetchWebViewTitle];
@@ -38,10 +43,13 @@ static NSString * const kProductChannel = @"1";
 //    [self testWebpForWebView];
 //    [self testYMProgress];
 //    [self testBackgroundTask];
-//    
 //    [self testUploadImage];
-//    
 //    [self testUploadJSONData];
+    
+    [self testYMWebView];
+    
+//    [self testIsPhoneNumber];
+
 }
 
 - (void)motionEnded:(UIEventSubtype)motion
@@ -121,9 +129,9 @@ static NSString * const kProductChannel = @"1";
 - (void)testWebp
 {
     //标准webpURL
-    NSString *url = @"http://img01.taobaocdn.com/imgextra/i1/1123492339/T2XX3ZXhXXXXXXXXXX_!!1123492339.jpg_.webp";
+//    NSString *url = @"http://img01.taobaocdn.com/imgextra/i1/1123492339/T2XX3ZXhXXXXXXXXXX_!!1123492339.jpg_.webp";
     //玉米webpURL
-//  NSString *url = @"http://yumi2014.b0.upaiyun.com/banner/14483353790a62cd5be70e4e2f877e410df031febc.jpg!webp.orginal";
+  NSString *url = @"http://yumi2014.b0.upaiyun.com/banner/14483353790a62cd5be70e4e2f877e410df031febc.jpg!webp.orginal";
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     imgView.backgroundColor = [UIColor redColor];
@@ -185,7 +193,7 @@ static NSString * const kProductChannel = @"1";
 
 - (void)testUploadImage
 {
-    UIImage *testImage = [UIImage imageNamed:@"弹窗"];
+    UIImage *testImage = [UIImage imageNamed:@"测试图片上传"];
     NSArray *images = [[NSArray alloc]initWithObjects:testImage, nil];
     NSArray *names = [[NSArray alloc]initWithObjects:@"image0", nil];
     
@@ -234,6 +242,45 @@ static NSString * const kProductChannel = @"1";
                           failure:^(NSURLSessionDataTask *task, NSError *error) {
                               NSLog(@"error %@",error.localizedDescription);
                           }];
+}
+
+- (void)testYMWebView
+{
+    YMWebView *webView = [[YMWebView alloc] initWithContainerVC:self];
+    webView.frame = self.view.bounds;
+    [self.view addSubview:webView];
+    webView.ym_Delegate = self;
+    
+    self.navigationItem.title = @"首页";
+    
+    NSMutableURLRequest *request = [YMHTTPManager requestWithMethodType:YMHttpRequestTypeForGet
+                                                             URLAddress:@"http://www.baidu.com"
+                                                                timeout:10
+                                                             parameters:nil];
+    [webView loadRequest:request];
+    
+    [YMWebView loadGlobalShouldStartHandler:^BOOL(UIWebView *webView, UIViewController *containerVC, NSURLRequest *request, UIWebViewNavigationType navigationType) {
+        NSString *url = request.URL.absoluteString;
+        NSLog(@"url is %@",url);
+        NSLog(@"navigationType is %ld",navigationType);
+        
+        if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+            BaseWebVC *webVC = [[BaseWebVC alloc] initWithRequest:request];
+            [containerVC.navigationController pushViewController:webVC animated:YES];
+            return NO;
+        }
+        
+        return YES;
+    }];
+}
+
+- (void)testIsPhoneNumber
+{
+    NSString *phone = @"15980287196";
+    
+    if([phone ym_isMobileNumber]){
+        [YMProgress showSuccessStatus:@"是手机号"];
+    }
 }
 
 @end

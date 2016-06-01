@@ -8,9 +8,12 @@
 
 #import <YMFramework/YMFramework.h>
 
+#import <Bugtags/Bugtags.h>
+
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "TestThreePlatformViewController.h"
+#import "BaseVenderVC.h"
 
 @interface AppDelegate ()
 
@@ -33,9 +36,35 @@
     [YMAnalytics startReport];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [[TestThreePlatformViewController alloc] init];
-    self.window.rootViewController = [[ViewController alloc] init];
+
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+
+    ViewController *vc1 = [[ViewController alloc] init];
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:vc1];
+    nav1.tabBarItem.title = @"基础框架";
+    nav1.navigationBarHidden = YES;
+    [tabBarController addChildViewController:nav1];
+    
+    
+    TestThreePlatformViewController *vc2 = [[TestThreePlatformViewController alloc] init];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc2];
+    nav2.tabBarItem.title = @"社交平台";
+    nav2.navigationBarHidden = YES;
+    [tabBarController addChildViewController:nav2];
+    
+    BaseVenderVC *vc3 = [[BaseVenderVC alloc] init];
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:vc3];
+    nav3.tabBarItem.title = @"BaseVender";
+    nav3.navigationBarHidden = YES;
+    [tabBarController addChildViewController:nav3];
+
+    self.window.rootViewController = tabBarController;
+    
     [self.window makeKeyAndVisible];
+    
+    [Bugtags startWithAppKey:@"d52480aa42ebf840bb397342bb5e3808"
+             invocationEvent:BTGInvocationEventShake];
+    
     return YES;
 }
 
